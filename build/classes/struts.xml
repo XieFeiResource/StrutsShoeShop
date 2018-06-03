@@ -2,50 +2,8 @@
  <!DOCTYPE struts PUBLIC
 	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
-	<struts>
-		
-		 
-	   
-        <!--如果请求的路径不存在则跳转到该页面 -->  
-        <package name="default" extends="struts-default">  
-	        <default-action-ref name="default"></default-action-ref>  
-	        <action name="default">  
-	            <result>/default.jsp</result>  
-	        </action>  
-        </package>
-     
-		
-		<!-- 配置你写好的后台组建，让struts识别它struts-default指定方法名login -->
-		<package name="user"  extends="struts-default" >
-		
-			<!-- 配置拦截器，排除不合法操作，在包下面，即这个模块 ；只对action作拦截
-			jsp跳转方式直接在界面判断拦截-->
-			<interceptors>           
-			    <interceptor name="userInterceptor" class="com.oracle.interceptor.userInterceptor"></interceptor>			
-			</interceptors> 
-			
-			<!-- 读文档可知道这个标签的顺序是在这里,拦截失败后跳转的地方 -->
-			<global-results>
-			   <result name="checkSessionLogin">/login.jsp</result>
-			</global-results>
-		     
-		     
-			<!-- 用户模块 -->
-			<action name="UserAction"  class="com.oracle.action.UserAction">
-				<result name="success">/index.jsp</result>
-				<result name="fail">/login.jsp</result>
-				
-							
-				<!-- 调用了自己写的拦截器 ,必须配置默认拦截器才起作用-->
-				<interceptor-ref name="userInterceptor"></interceptor-ref>
-				<interceptor-ref name="defaultStack"></interceptor-ref>
-			</action>
-			
-			
-			<!-- 验证码模块 -->
-			<action name="CodeAction"  class="com.oracle.action.CodeAction">					
-			</action>
-		 
-		</package>
-		
-	</struts>
+<struts>
+	<package name="user"  extends="struts-default"  abstract="false"  namespace="/admin">
+			<action name="CodeAction"  class="com.oracle.action.CodeAction"></action>
+	</package>
+</struts>

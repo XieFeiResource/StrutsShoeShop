@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -13,45 +14,36 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
-import com.opensymphony.xwork2.ActionSupport;
-import com.oracle.Util.ResponserByajax;
-
-public class CodeAction extends ActionSupport{
-	 private String code;//获取前端输入的code
-	
-	public String getCode() {
+public class CodeAction {
+	HttpServletRequest request=ServletActionContext.getRequest();
+	 HttpServletResponse response=ServletActionContext.getResponse();
+	 private String code;
+	 
+	 public String getCode() {
 		return code;
 	}
+
 	public void setCode(String code) {
 		this.code = code;
 	}
 
-
-	HttpServletRequest request=ServletActionContext.getRequest();
-	 HttpServletResponse response=ServletActionContext.getResponse();
-	
-	 
-	 private static int width = 90;// 定义图片的width
+	private static int width = 90;// 定义图片的width
 	 private static int height = 30;// 定义图片的height                                                                                   
 	 private static int codeCount = 4;// 定义图片上显示验证码的个数                                                                               
 	 private static int xx = 15;                                                                                                     
 	 private static int fontHeight = 28;                                                                                             
 	 private static  int codeY = 25;                                                                                                 
 	 private static char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-	         'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };                             
-
-
-	 
-	 /**
-	  * //生成验证码时，会请求的方法
-	  */
-	 public void excute(){
-		//1.先设置这个servlet的输出格式  ,
-			response.setContentType("image/jpeg");//通知浏览器，我这个servet运行完之后给浏览器什么的内容
+	         'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };         
+	 public void  execute() {
+		 	response.setContentType("image/jpeg");//通知浏览器，我这个servet运行完之后给浏览器什么的内容
 	        response.setHeader("Pragma", "No-cache");
 	        response.setHeader("Cache-Control", "no-cache");
-	        response.setDateHeader("Expires", 0);	        
-	        	        
+	        response.setDateHeader("Expires", 0);
+	        
+	        
+	        
+	        
 	        //2.java代码负责动态生成一个内存中图片
 	        // 定义图像buffer
 	        BufferedImage buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);      
@@ -105,32 +97,34 @@ public class CodeAction extends ActionSupport{
 	        }                                                                                          
 	        //存放验证码                                                                                    
 //	        map.put("code", randomCode);                                                               
-	       
 	        //存放生成的验证码BufferedImage对象                                                                  
 	        request.getSession().setAttribute("generateCode", randomCode);//将生成的验证码存储到session中，因为只有session能跨多个页面("多个servlet")
-	      
 	        //3.用servlet的输出流将这个图片写出去
 	        try {
 				ImageIO.write(buffImg, "jpeg",response.getOutputStream());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	 }
 	 
-	 
-	 /**
-	  * ajax请问验证验证码是否正确时会请求的方法
-	  */
-	 public void identifyCode(){
-		 //获取生成的验证码，存储在session中
-		 String autoCode=request.getSession().getAttribute("generateCode").toString();
-		 String isRight=null;
-		 if(code!=null&&code.equalsIgnoreCase(autoCode)){
-			 isRight="right";
-		 }else{
-			 isRight="wrong";
-		 }
-		 ResponserByajax.responseToText(request, response, isRight);
+	 public void checkCode() {
+		 response.setContentType("text/html;charset=utf-8");
+		 try {
+			PrintWriter  out=response.getWriter();
+			String systemCode=request.getSession().getAttribute("generateCode").toString();
+//			System.out.println(systemCode+"---"+code);
+			if(code!=null&&code.equalsIgnoreCase(systemCode)) {
+				out.write("true");
+			}else {
+				out.write("false");
+			}
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		 
 	 }
+	 
+	
 }

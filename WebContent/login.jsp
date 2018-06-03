@@ -5,7 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<base href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/strutsCarshopServer/">
+<base href="${pageContext.request.scheme }://${pageContext.request.serverName}:${pageContext.request.serverPort}/strutsShoeShopServer/">
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>登陆</title>
@@ -13,7 +13,7 @@
 	<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css" />
 	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
 	<script type="text/javascript" src="easyui/jquery.min.js"></script>
-	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>	
+	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="easyui/locale/easyui-lang-zh_CN.js"></script>
 	
 	
@@ -44,9 +44,9 @@
 				<input class="easyui-passwordbox" name="u.password" style="width:100%" data-options="label:'密码:',required:true">
 			</div>	
 			<div style="margin-bottom:20px">
-				<input class="easyui-textbox" name="code" style="width:60%" data-options="label:'验证码:'">
-				<img id="autocode" alt="" src="CodeAction!excute.action" style="width: 90px;height: 30px;position: relative;top: 11px;margin-left: 10px;">
-			</div>		
+				<input class="easyui-textbox" name="code"  maxlength="4" style="width:60%" data-options="label:'验证码:'">
+				<img id="code" src="admin/CodeAction.action" style="width: 90px;height: 30px;position: relative;top: 11px;margin-left: 10px;" />
+			</div>
 		</form>
 		<div style="text-align:center;padding:5px 0">
 			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">提交</a>
